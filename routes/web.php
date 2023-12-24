@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MusicController;
+use App\Http\Controllers\PurchaseController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+// Music Management
+Route::get('/search', [MusicController::class, 'search']);
+Route::get('/albums/{albumId}/songs', [MusicController::class, 'findSongByAlbum']);
+Route::post('/purchase/{albumId}', [PurchaseController::class, 'purchase']);
+Route::get('/purchases', [PurchaseController::class, 'getPurchases']);
+
