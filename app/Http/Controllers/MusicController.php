@@ -14,6 +14,11 @@ class MusicController extends Controller
 
         return response()->json(['songs' => $songs]);
     }
+    public function getAlbums()
+    {
+        $albums = Album::all();
+        return response()->json($albums);
+    }
     public function findSongByAlbum($albumId)
     {
         $song = Song::find($albumId);

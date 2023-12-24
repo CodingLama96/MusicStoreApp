@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -45,5 +46,9 @@ class User extends Authenticatable
     public function albums()
     {
         return $this->belongsToMany(Album::class, 'user_albums', 'user_id', 'album_id')->withTimestamps();
+    }
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
     }
 }
