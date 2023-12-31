@@ -9,6 +9,34 @@ use App\Models\Song;
 
 class AdminController extends Controller
 {
+    public function getArtists()
+    {
+        $artist = Artist::all();
+        return response()->json($artist);
+    }
+    public function getAlbums()
+    {
+        $album = Album::all();
+        return response()->json($album);
+    }
+    public function getAlbumsByArtist($artistId)
+    {
+        $albums = Album::where('artist_id', $artistId)->get();
+
+        if ($albums->isEmpty()) {
+            return response()->json(['error' => 'No albums  found for this artist'], 404);
+        }
+        return response()->json($albums);
+    }
+    public function getSongsByALbum($albumId)
+    {
+        $songs = Song::where('album_id', $albumId)->get();
+
+        if ($songs->isEmpty()) {
+            return response()->json(['error' => 'No songs  found in this album'], 404);
+        }
+        return response()->json($songs);
+    }
     public function addArtist(Request $request)
     {
         $request->validate([
@@ -22,11 +50,10 @@ class AdminController extends Controller
         return response()->json(['artist' => $artist, 'message' => 'Artist added successfully']);
     }
 
-    public function addAlbum(Request $request)
+    public function addAlbum(Request $request, $artist_id)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'artist_id' => 'required|exists:artists,id',
             'artwork' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'genre' => 'required|string|max:255',
         ]);
@@ -35,7 +62,7 @@ class AdminController extends Controller
 
         $album = Album::create([
             'title' => $request->input('title'),
-            'artist_id' => $request->input('artist_id'),
+            'artist_id' => $artist_id,
             'artwork' => $artworkPath,
             'genre' => $request->input('genre'),
         ]);
@@ -43,19 +70,18 @@ class AdminController extends Controller
         return response()->json(['album' => $album, 'message' => 'Album added successfully']);
     }
 
-    public function addSong(Request $request)
+    public function addSong(Request $request, $album_id)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'album_id' => 'required|exists:albums,id',
-            'audio' => 'required|mimes:mp3|max:20480',
+            'audio' => 'required|mimes:audio/mpeg,mpga,mp3',
         ]);
-
-        $audioPath = $request->file('audio')->store('songs/audio', 'public');
-
+        $audio = $request->file('audio');
+        $audioPath = 'audio/' . $audio->hashName();
+        $audio->storeAs('public/audio', $audio->hashName());
         $song = Song::create([
             'title' => $request->input('title'),
-            'album_id' => $request->input('album_id'),
+            'album_id' => $album_id,
             'audio' => $audioPath,
         ]);
 

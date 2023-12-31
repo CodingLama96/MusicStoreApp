@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -17,7 +18,6 @@ class AuthController extends Controller
             'role' => 'required|in:user,admin'
         ]);
 
-        // Create a new user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -25,7 +25,6 @@ class AuthController extends Controller
             'role' => $request->role,
         ]);
 
-        // TODO: Send verification email or perform other actions as needed
 
         return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
     }
@@ -47,14 +46,18 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Invalid credentials',
-        ], 401); 
+        ], 401);
     }
     public function getUserData(Request $request)
     {
-        // Retrieve the authenticated user
         $user = $request->user();
 
-        // Return user data
         return response()->json(['user' => $user]);
     }
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
+
 }

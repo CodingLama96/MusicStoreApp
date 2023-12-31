@@ -9,28 +9,56 @@ use App\Models\User;
 
 class PurchaseController extends Controller
 {
-    // will be changed later for only authenticated user
     public function purchase($albumId)
     {
-        $user = Auth::user();
-
-        if (!$user) {
-            $user = User::find(1);
-        }
         $album = Album::findOrFail($albumId);
 
-        // Attach the album to the user's purchased albums
-        $user->albums()->attach($album);
+        Auth::User()->albums()->attach($album);
 
         return response()->json(['message' => 'Album purchased successfully']);
     }
 
     public function getPurchases()
     {
-        $user = User::find(1);
-        // Get user's purchased music
-        $purchasedAlbums = $user->albums;
+        $purchasedAlbums = Auth::user()->albums()
+            ->with(['songs.artist', 'artist'])
+            ->get();
 
         return response()->json(['purchased_albums' => $purchasedAlbums]);
     }
+
+
+
+    public function search(Request $request)
+    {
+        $user_id = auth()->id();
+        $search = $request->input('search');
+        $sort = $request->input('sort');
+
+        $query = Album::query()->with('artist')
+            ->join('user_albums', 'albums.id', '=', 'user_albums.album_id')
+            ->where('user_albums.user_id', $user_id);
+
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        if ($sort) {
+            if ($sort === 'artist.name') {
+                $query->join('artists', 'albums.artist_id', '=', 'artists.id')
+                    ->orderBy('artists.name');
+            } else {
+                $query->orderBy($sort);
+            }
+        }
+
+        $result = $query->get();
+
+        return response()->json($result);
+    }
+
+
+
+
+
 }

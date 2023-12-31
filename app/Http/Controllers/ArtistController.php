@@ -19,7 +19,7 @@ class ArtistController extends Controller
         $artist = Artist::findOrFail($artistId);
         $albums = $artist->albums;
 
-        return response()->json([ 'albums' => $albums]);
+        return response()->json(['albums' => $albums]);
     }
 }
 

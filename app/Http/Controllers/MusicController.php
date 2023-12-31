@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Album;
 use App\Models\Song;
+
 class MusicController extends Controller
 {
     public function search(Request $request)
@@ -21,11 +22,12 @@ class MusicController extends Controller
     }
     public function findSongByAlbum($albumId)
     {
-        $song = Song::find($albumId);
-        if (!$song) {
-            return response()->json(['error' => 'Song not found'], 404);
+        $songs = Song::where('album_id', $albumId)->get();
+
+        if ($songs->isEmpty()) {
+            return response()->json(['error' => 'Songs not found for the album'], 404);
         }
 
-        return response()->json($song);
+        return response()->json($songs);
     }
 }
