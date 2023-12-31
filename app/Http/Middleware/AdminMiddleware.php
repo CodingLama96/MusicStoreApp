@@ -17,13 +17,9 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::loginUsingId(1);
-        if ($user && $user->isAdmin()) {
+        if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
-        // if (Auth::check() && Auth::user()->isAdmin()) {
-        //     return $next($request);
-        // }
 
         return response()->json(['message' => 'Unauthorized'], 401);
     }
