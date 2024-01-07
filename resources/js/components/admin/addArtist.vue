@@ -1,5 +1,7 @@
 <template>
-  <div class="container mx-auto p-4">
+  
+  <div class="dashboard bg-gray-100 min-h-screen">
+    <navbar></navbar>
     <div class="add-artist-form">
       <h2 class="text-2xl font-semibold mb-4">Add New Artist</h2>
       <form
@@ -48,8 +50,11 @@
 
 <script>
 import axios from "axios";
-
+import navbar from "./navbar.vue";
 export default {
+    components: {
+    navbar,
+  },
   data() {
     return {
       newArtistName: "",

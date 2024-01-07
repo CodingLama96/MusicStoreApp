@@ -3,16 +3,7 @@
     <nav class="bg-blue-500 p-4 text-white">
       <div class="container mx-auto flex justify-between items-center">
         <span class="text-2xl font-semibold">Albums Page</span>
-        <div class="relative" @click="toggleDropdown">
-          <button class="text-white">{{ currentUser.name }}</button>
-          <div
-            v-show="isDropdownOpen"
-            class="absolute top-10 right-0 bg-white shadow-md p-2 rounded-lg"
-          >
-            <button @click="profile" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Profile</button>
-            <button @click="logout" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Logout</button>
-          </div>
-        </div>
+        <router-link to="/user/dashboard" class="text-white">Back to Dashboard</router-link>
       </div>
     </nav>
 

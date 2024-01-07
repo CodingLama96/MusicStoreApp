@@ -1,5 +1,6 @@
 <template>
-  <div class="add-album-container container mx-auto p-4">
+  <div class="add-album-bg-gray-100 min-h-screen">
+    <navbar></navbar>
     <h2 class="text-2xl font-semibold mb-4">Add New Song</h2>
     <form @submit.prevent="addSong" class="flex flex-col space-y-4">
       <div class="flex items-center">
@@ -46,8 +47,12 @@
 
 <script>
 import axios from "axios";
-
+import navbar from "./navbar.vue";
+  
 export default {
+  components: {
+    navbar,
+  },
   data() {
     return {
       newSongTitle: "",
@@ -85,7 +90,7 @@ export default {
         );
         console.log("Song added successfully:", response.data);
         await this.fetchSongs();
-        this.$router.push(`/admin/addAlbum/${this.newSongAlbumId}`);
+        // this.$router.push(`/admin/addAlbum/${this.newSongAlbumId}`);
       } catch (error) {
         console.error("Error adding song:", error);
       }

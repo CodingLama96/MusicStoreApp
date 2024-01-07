@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard bg-gray-100 min-h-screen">
-    <nav class="bg-blue-500 p-4 text-white">
+    <navbar></navbar>
+    <!-- <nav class="bg-blue-500 p-4 text-white">
       <div class="container mx-auto flex justify-between items-center">
         <span class="text-2xl font-semibold">Dashboard</span>
         <div class="relative" @click="toggleDropdown">
@@ -14,7 +15,7 @@
           </div>
         </div>
       </div>
-    </nav>
+    </nav> -->
     <div class="container mx-auto p-4">
       <h2 class="text-2xl font-semibold mb-4">Welcome, {{ isAdmin ? 'Admin' : 'User' }}!</h2>
 
@@ -30,8 +31,12 @@
   
   <script>
 import axios from "axios";
-
+import navbar from "./navbar.vue";
+  
 export default {
+  components: {
+    navbar,
+  },
   data() {
     return {
       isDropdownOpen: false,
